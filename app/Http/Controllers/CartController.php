@@ -10,10 +10,13 @@ class CartController extends Controller
     //
     public function index(Request $request)
     {
-        $products = DB::table('product')
-            ->select('*')
+        $customer_id = 1;
+        $user_cart = DB::table('cart')
+            ->join('product', 'cart.product_id', '=', 'product.id')
+            ->select('cart.*', 'product.name', 'product.price', 'product.image')
+            ->where('cart.customer_id', $customer_id)
             ->get();
-        return view('cart', ['products' => $products]);
+        return view('cart', ['user_cart' => $user_cart]);
     }
 
     public function addToCart(Request $request)
@@ -46,4 +49,32 @@ class CartController extends Controller
                 'last_cart' => $last_cart
             ]);
     }
+
+    public function removeCart(Request $request)
+    {
+        $cart_id = $request->input('cart_id');
+        DB::table('cart')
+            ->where('id', $cart_id)
+            ->delete();
+        return redirect('/cart');
+    }
+
+    public function updateCart(Request $request)
+    {
+        $request->validate([
+            'qty' => 'required|integer|min:1|max:100'
+        ]);
+
+
+        $cart_id = $request->input('cart_id');
+        DB::table('cart')
+            ->where('id', $cart_id)
+            ->update([
+                'qty' => $request->input('qty')
+            ]);
+        return redirect('/cart')->with('success', 'Cart updated successfully.');;
+    }
+
+
+
 }

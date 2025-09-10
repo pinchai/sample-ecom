@@ -10,7 +10,7 @@
                     <span class="badge badge-dark ml-2">{{ $cartCount ?? 0 }} items</span>
                 </div>
 
-                @if(($cartItems ?? collect())->isEmpty())
+                @if(($user_cart ?? collect())->isEmpty())
                     <div class="card border-0 shadow-sm">
                         <div class="card-body text-center py-5">
                             <div class="display-4 mb-2">🧺</div>
@@ -33,12 +33,22 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($cartItems as $item)
+                                <!-- Error messages (like Flask flash) -->
+                                @if($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul class="mb-0">
+                                            @foreach($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                                @foreach($user_cart as $item)
                                     <tr>
                                         <td>
                                             <div class="media align-items-center">
                                                 <img class="cart-thumb mr-3"
-                                                     src="{{ $item->image_url ?? asset('placeholder.png') }}"
+                                                     src="{{ asset('/').'image/'.$item->image }}"
                                                      alt="{{ $item->name }}">
                                                 <div class="media-body">
                                                     <div class="font-weight-600">{{ $item->name }}</div>
@@ -64,11 +74,11 @@
 
                                         <td class="text-center">
                                             {{-- Update quantity form --}}
-                                            <form action="{{ route('cart.update', $item->row_id ?? $item->id) }}"
+                                            <form action="{{ route('cart_update') }}"
                                                   method="post"
                                                   class="d-inline-flex align-items-center justify-content-center">
                                                 @csrf
-                                                @method('PATCH')
+                                                <input type="hidden" name="cart_id" value="{{ $item->id }}">
                                                 <input type="number" name="qty"
                                                        class="form-control form-control-sm text-center qty-input"
                                                        value="{{ $item->qty }}" min="1">
@@ -82,10 +92,9 @@
 
                                         <td class="text-center">
                                             {{-- Remove item form --}}
-                                            <form action="{{ route('cart.remove', $item->row_id ?? $item->id) }}"
-                                                  method="post">
+                                            <form action="{{ route('cart_remove') }}" method="post">
                                                 @csrf
-                                                @method('DELETE')
+                                                <input type="hidden" name="cart_id" value="{{ $item->id }}">
                                                 <button class="btn btn-sm btn-outline-danger" type="submit"
                                                         aria-label="Remove">×
                                                 </button>
@@ -138,7 +147,8 @@
                         </ul>
 
                         <a href="/" class="btn btn-outline-dark btn-block mb-2">Continue shopping</a>
-                        <a href="{{ route('checkout_index') }}" class="btn btn-dark btn-block" type="submit">Checkout</a>
+                        <a href="{{ route('checkout_index') }}" class="btn btn-dark btn-block"
+                           type="submit">Checkout</a>
                     </div>
                 </div>
 
