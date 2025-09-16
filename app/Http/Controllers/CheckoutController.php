@@ -10,6 +10,7 @@ class CheckoutController extends Controller
     //
     public function index(Request $request)
     {
+        dd($request->all());
         $products = DB::table('product')
             ->select('*')
             ->get();

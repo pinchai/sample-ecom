@@ -4,7 +4,7 @@
     <div class="container py-4">
         <div class="row">
             {{-- Left: Forms --}}
-            <div class="col-12 mb-2">
+            <div class="col-8 mb-2">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <h4 class="mb-3">Checkout</h4>
@@ -48,6 +48,35 @@
                         </form>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-4 mb-2">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-borderless">
+                                <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Name</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Coca</td>
+                                    <td>12$</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-outline-primary w-100">
+                            Place Order
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

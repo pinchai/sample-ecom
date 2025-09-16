@@ -86,13 +86,6 @@
             }
         },
         methods: {
-            // Swal.fire({
-            //     title: "Deleted!",
-            //     text: "Your file has been deleted.",
-            //     icon: "success"
-            // });
-
-
             addToCart(product_id) {
                 let url = "{{ url('/cart/add-to-cart') }}"
                 $.LoadingOverlay("show");
@@ -115,6 +108,40 @@
 
                     $.LoadingOverlay("hide");
                 })
+            },
+            removeCart(cart_id) {
+                let url = "{{ url('/cart/remove') }}"
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.LoadingOverlay("show");
+                        axios.post(url, {
+                            cart_id: cart_id
+                        })
+                            .then(function (response) {
+                                Swal.fire({
+                                    position: "top-end",
+                                    icon: "success",
+                                    title: "Remove successfully!",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                window.location.href = "{{ url('/cart') }}";
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            }).finally(function () {
+                            $.LoadingOverlay("hide");
+                        })
+                    }
+                });
             }
         }
     }).mount('#app');

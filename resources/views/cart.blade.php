@@ -16,7 +16,7 @@
                             <div class="display-4 mb-2">🧺</div>
                             <h5 class="mb-2">Your cart is empty</h5>
                             <p class="text-secondary mb-4">Let’s find something you’ll love.</p>
-                            <a href="/product" class="btn btn-dark rounded-pill">Start shopping</a>
+                            <a href="/" class="btn btn-dark rounded-pill">Start shopping</a>
                         </div>
                     </div>
                 @else
@@ -92,13 +92,14 @@
 
                                         <td class="text-center">
                                             {{-- Remove item form --}}
-                                            <form action="{{ route('cart_remove') }}" method="post">
-                                                @csrf
-                                                <input type="hidden" name="cart_id" value="{{ $item->id }}">
-                                                <button class="btn btn-sm btn-outline-danger" type="submit"
-                                                        aria-label="Remove">×
-                                                </button>
-                                            </form>
+                                            <button
+                                                class="btn btn-sm btn-outline-danger"
+                                                type="button"
+                                                aria-label="Remove"
+                                                @click="removeCart({{ $item->id }})"
+                                            >
+                                                X
+                                            </button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -145,10 +146,19 @@
                                 <span class="font-weight-bold">${{ number_format(($total ?? 0), 2) }}</span>
                             </li>
                         </ul>
-
                         <a href="/" class="btn btn-outline-dark btn-block mb-2">Continue shopping</a>
-                        <a href="{{ route('checkout_index') }}" class="btn btn-dark btn-block"
-                           type="submit">Checkout</a>
+                        <form
+                            method="post"
+                            action="{{ route('checkout_index') }}"
+                        >
+                            @csrf
+                            <input type="hidden" name="customer_id" value="{{ $item->customer_id }}">
+                            <input
+                                type="submit"
+                                class="btn btn-dark btn-block"
+                                value="Checkout"
+                            >
+                        </form>
                     </div>
                 </div>
 

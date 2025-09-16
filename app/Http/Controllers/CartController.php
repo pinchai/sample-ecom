@@ -56,7 +56,9 @@ class CartController extends Controller
         DB::table('cart')
             ->where('id', $cart_id)
             ->delete();
-        return redirect('/cart');
+        return response()->json([
+            'message' => 'Product removed from cart'
+        ]);
     }
 
     public function updateCart(Request $request)

@@ -6,5 +6,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/getById', [HomeController::class, 'getById']);
 
-Route::get('/checkout', [CheckoutController::class, 'index'])
+Route::post('/checkout', [CheckoutController::class, 'index'])
     ->name('checkout_index');
